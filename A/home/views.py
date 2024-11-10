@@ -28,13 +28,30 @@ class QuestionView(APIView):
       return Response(ser_data, status=status.HTTP_200_OK)
 
 
-
    def post(self, request):
-      pass 
+      ser_data = QuestionSerializer(data = request.POST)
+      if ser_data.is_valid():
+         ser_data.save()
+         return Response(ser_data.data, status=status.HTTP_201_CREATED)
+      return Response(ser_data.errors, status=status.HTTP_400_BAD_REQUEST)
+   
 
-   def put(self, request):
-      pass 
 
-   def delete(self, request):
-      pass       
+   def put(self, request, pk):
+      question = Question.objects.get(id=pk)
+      ser_data = QuestionSerializer(instance= question, data=request.POST, partial = True)
+      if ser_data.is_valid():
+         ser_data.save()
+         return Response(ser_data.data, status=status.HTTP_200_OK)
+      return Response(ser_data.errors, status=status.HTTP_400_BAD_REQUEST)
+         
+
+
+
+   def delete(self, request, pk):
+      question = Question.objects.get(id= pk)
+      question.delete()
+      return Response(status=status.HTTP_204_NO_CONTENT)
+   
+   
      
