@@ -39,8 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'home.apps.HomeConfig',
     'rest_framework',
+    'drf_spectacular',
     'accounts.apps.AccountsConfig',
-    'rest_framework.authtoken',
+
 ]
 
 MIDDLEWARE = [
@@ -129,14 +130,24 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES' : [
-        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
     'DEFAULT_THROTTLE_CLASSES': [
         'rest_framework.throttling.ScopedRateThrottle',
     ],
-     'DEFAULT_THROTTLE_RATES' : {
+    'DEFAULT_THROTTLE_RATES' : {
           'questions': '5/minute',
-     }
+    },
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
+
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Shop rest',
+    'DESCRIPTION': 'Your project description',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    # OTHER SETTINGS
+}
 

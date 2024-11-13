@@ -12,7 +12,7 @@ from rest_framework.throttling import UserRateThrottle, AnonRateThrottle
 
 
 class Home(APIView):
-   permission_classes = [AllowAny]
+   permission_classes = [IsAuthenticated,]
    def get(self, request):
       person = Person.objects.all()
       ser_data = PersonSerializer(instance = person, many = True)
@@ -29,8 +29,12 @@ class QuestionListView(APIView):
 
 
 class QuestionCreateView(APIView):
+   """
+   Create New Question
+   """
 
    permission_classes = [IsAuthenticated,]
+   serializer_class =  QuestionSerializer
 
    def post(self, request):
       ser_data = QuestionSerializer(data = request.POST)
