@@ -6,8 +6,36 @@ from . serializers import UserRegisterSerializer, UserSerializer
 from rest_framework import status, viewsets
 from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
-
+from rest_framework import generics
+from django.core.paginator import Paginator
+from rest_framework.pagination import PageNumberPagination
 # Create your views here.
+
+class UserViewSet(viewsets.ViewSet):
+    queryset = User.objects.all()
+
+    def list(self, request):
+        srz_data = UserSerializer(instance = self.queryset, many = True)
+        return Response(data=srz_data.data)
+
+class UserApi(APIView):
+    def get(self, request):
+        queryset = User.objects.all()
+        page_number = self.request.query_params.get('page', 1)
+        page_size = self.request.query_params.get('limit', 2)
+        paginator = Paginator(queryset, page_size,)
+        srz_data = UserSerializer(instance = paginator.page(page_number), many = True)
+        return Response(data=srz_data.data)
+
+class UserListApi(generics.ListAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+
+
+
+
+
 
 
 
